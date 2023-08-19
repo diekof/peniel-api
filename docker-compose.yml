@@ -21,20 +21,20 @@ services:
       timeout: 5s
       retries: 5 
 
-  api:
-    container_name: peniel-api
-    build: 
-      context: .
-      dockerfile: ./Dockerfile
-    entrypoint: ./api.sh
-    ports:
-      - 3000:3000
-    volumes:
-      - .:/home/node/app
-    networks: 
-      - peniel      
-    depends_on: 
-      - db   
+  # api:
+  #   container_name: peniel-api
+  #   build: 
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   entrypoint: ./api.sh
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - .:/home/node/app
+  #   networks: 
+  #     - peniel      
+  #   depends_on: 
+  #     - db   
 
 networks: 
   peniel:

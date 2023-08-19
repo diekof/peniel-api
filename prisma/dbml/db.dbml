@@ -91,6 +91,7 @@ Table tipoConsulta {
 Table tipoExame {
   id String [pk]
   nome String [not null]
+  descricao String [not null]
   isAtivo Boolean [not null]
   consulta_consulta_tipoExameTotipoExame consulta [not null]
 }

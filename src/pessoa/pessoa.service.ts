@@ -25,6 +25,7 @@ export class PessoaService {
     return paginator(pageOptionsDto)(this.prisma.pessoa).then((pessoas) => {
       return pessoas;
     }).catch((error) => {
+      console.log(error);
       throw new BadRequestException('Ops! Ocorreu um erro ao buscar as pessoas.');
     });
   }
@@ -33,12 +34,12 @@ export class PessoaService {
     return this.prisma.pessoa.findUnique({
       where: { id },
       }).then((pessoa) => {
+        console.log(pessoa);
         if (!pessoa) {
-          throw new BadRequestException('Ops! Pessoa não encontrada.');
+          throw new Error('Ops! Pessoa não encontrada.');
         }
-        return pessoa;
       }).catch((error) => {
-        throw new BadRequestException('Ops! Ocorreu um erro ao buscar a pessoa.');
+        throw new BadRequestException(`${error}`);
       });
   }
 

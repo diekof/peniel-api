@@ -18,7 +18,7 @@ datasource db {
 }
 
 model agendamento {
-  id                                                  String       @id @db.Uuid
+  id                                                  String       @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   data                                                BigInt
   pessoaId                                            String       @db.Uuid
   tipoConsulta                                        String       @db.Uuid
@@ -29,7 +29,7 @@ model agendamento {
 }
 
 model consulta {
-  id                                      String       @id @db.Uuid
+  id                                      String       @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   data                                    DateTime     @db.Date
   pessoaId                                String       @db.Uuid
   situacao                                String       @db.VarChar(255)
@@ -46,7 +46,7 @@ model consulta {
 }
 
 model consultaPos {
-  id         String   @id @db.Uuid
+  id         String   @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   consultaId BigInt
   isAjuda    Boolean
   isVisita   Boolean
@@ -55,7 +55,7 @@ model consultaPos {
 }
 
 model medico {
-  id       String     @id @db.Uuid
+  id       String     @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   crm      String     @db.VarChar(255)
   consulta consulta[]
   pessoa   pessoa     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "medico_id_foreign")
@@ -81,7 +81,7 @@ model pessoa {
 }
 
 model pessoaContato {
-  id          String  @id @db.Uuid
+  id          String  @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   nome        String  @db.VarChar(255)
   isPrincipal Boolean
   tipo        BigInt
@@ -90,28 +90,29 @@ model pessoaContato {
 }
 
 model role {
-  id          String        @id @db.Uuid
+  id          String        @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   nome        String        @db.VarChar(255)
   isAtivo     Boolean
   usuarioRole usuarioRole[]
 }
 
 model tipoConsulta {
-  id                                                 String        @id @db.Uuid
+  id                                                 String        @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   nome                                               String        @db.VarChar(255)
   isAtivo                                            Boolean
   agendamento_agendamento_tipoConsultaTotipoConsulta agendamento[] @relation("agendamento_tipoConsultaTotipoConsulta")
 }
 
 model tipoExame {
-  id                                     String     @id @db.Uuid
+  id                                     String     @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   nome                                   String     @db.VarChar(255)
+  descricao                              String     @db.VarChar(255)
   isAtivo                                Boolean
   consulta_consulta_tipoExameTotipoExame consulta[] @relation("consulta_tipoExameTotipoExame")
 }
 
 model usuario {
-  id          String        @id @db.Uuid
+  id          String        @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   login       String        @db.VarChar(255)
   senha       String        @db.VarChar(255)
   token       String        @db.VarChar(255)
@@ -122,7 +123,7 @@ model usuario {
 }
 
 model usuarioRole {
-  id        String  @id @db.Uuid
+  id        String  @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   roleId    String  @db.Uuid
   usuarioId String  @db.Uuid
   role      role    @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariorole_roleid_foreign")
