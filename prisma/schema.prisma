@@ -62,7 +62,7 @@ model medico {
 }
 
 model pessoa {
-  id             String          @id @db.Uuid
+  id             String          @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   nome           String?         @db.VarChar(255)
   cpf            String          @db.VarChar(255)
   dataNascimento DateTime        @db.Date @default(now())
