@@ -1,0 +1,139 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table agendamento {
+  id String [pk]
+  data BigInt [not null]
+  pessoaId String [not null]
+  tipoConsulta String [not null]
+  isCompareceu Boolean [not null]
+  pessoa pessoa [not null]
+  tipoConsulta_agendamento_tipoConsultaTotipoConsulta tipoConsulta [not null]
+  consulta consulta [not null]
+}
+
+Table consulta {
+  id String [pk]
+  data DateTime [not null]
+  pessoaId String [not null]
+  situacao String [not null]
+  isRetorno Boolean [not null]
+  obervacao String [not null]
+  tipoExame String [not null]
+  medicoId String [not null]
+  agendamentoId String [not null]
+  agendamento agendamento [not null]
+  medico medico [not null]
+  pessoa pessoa [not null]
+  tipoExame_consulta_tipoExameTotipoExame tipoExame [not null]
+  consultaPos consultaPos
+}
+
+Table consultaPos {
+  id String [pk]
+  consultaId BigInt [not null]
+  isAjuda Boolean [not null]
+  isVisita Boolean [not null]
+  observacao String [not null]
+  consulta consulta [not null]
+}
+
+Table medico {
+  id String [pk]
+  crm String [not null]
+  consulta consulta [not null]
+  pessoa pessoa [not null]
+}
+
+Table pessoa {
+  id String [pk]
+  nome String
+  cpf String [not null]
+  dataNascimento DateTime [default: `now()`, not null]
+  cartaoSus String [not null]
+  endRua String [not null]
+  endBairro String [not null]
+  endNumero String [not null]
+  endCidade String [not null]
+  endEstado String [not null]
+  endCep String [not null]
+  agendamento agendamento [not null]
+  consulta consulta [not null]
+  medico medico
+  pessoaContato pessoaContato [not null]
+  usuario usuario [not null]
+}
+
+Table pessoaContato {
+  id String [pk]
+  nome String [not null]
+  isPrincipal Boolean [not null]
+  tipo BigInt [not null]
+  pessoaId String [not null]
+  pessoa pessoa [not null]
+}
+
+Table role {
+  id String [pk]
+  nome String [not null]
+  isAtivo Boolean [not null]
+  usuarioRole usuarioRole [not null]
+}
+
+Table tipoConsulta {
+  id String [pk]
+  nome String [not null]
+  isAtivo Boolean [not null]
+  agendamento_agendamento_tipoConsultaTotipoConsulta agendamento [not null]
+}
+
+Table tipoExame {
+  id String [pk]
+  nome String [not null]
+  isAtivo Boolean [not null]
+  consulta_consulta_tipoExameTotipoExame consulta [not null]
+}
+
+Table usuario {
+  id String [pk]
+  login String [not null]
+  senha String [not null]
+  token String [not null]
+  isAtivo Boolean [not null]
+  pessoaId String [not null]
+  pessoa pessoa [not null]
+  usuarioRole usuarioRole [not null]
+}
+
+Table usuarioRole {
+  id String [pk]
+  roleId String [not null]
+  usuarioId String [not null]
+  role role [not null]
+  usuario usuario [not null]
+}
+
+Ref: agendamento.pessoaId > pessoa.id [delete: No Action]
+
+Ref: agendamento.tipoConsulta > tipoConsulta.id [delete: No Action]
+
+Ref: consulta.agendamentoId > agendamento.id [delete: No Action]
+
+Ref: consulta.medicoId > medico.id [delete: No Action]
+
+Ref: consulta.pessoaId > pessoa.id [delete: No Action]
+
+Ref: consulta.tipoExame > tipoExame.id [delete: No Action]
+
+Ref: consultaPos.id - consulta.id [delete: No Action]
+
+Ref: medico.id - pessoa.id [delete: No Action]
+
+Ref: pessoaContato.pessoaId > pessoa.id [delete: No Action]
+
+Ref: usuario.pessoaId > pessoa.id [delete: No Action]
+
+Ref: usuarioRole.roleId > role.id [delete: No Action]
+
+Ref: usuarioRole.usuarioId > usuario.id [delete: No Action]

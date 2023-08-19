@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider   = "prisma-dbml-generator"
+  output     = "./dbml"
+  outputName = "db.dbml"
+}
+
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model agendamento {
+  id                                                  String       @id @db.Uuid
+  data                                                BigInt
+  pessoaId                                            String       @db.Uuid
+  tipoConsulta                                        String       @db.Uuid
+  isCompareceu                                        Boolean
+  pessoa                                              pessoa       @relation(fields: [pessoaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "agendamento_pessoaid_foreign")
+  tipoConsulta_agendamento_tipoConsultaTotipoConsulta tipoConsulta @relation("agendamento_tipoConsultaTotipoConsulta", fields: [tipoConsulta], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "agendamento_tipoconsulta_foreign")
+  consulta                                            consulta[]
+}
+
+model consulta {
+  id                                      String       @id @db.Uuid
+  data                                    DateTime     @db.Date
+  pessoaId                                String       @db.Uuid
+  situacao                                String       @db.VarChar(255)
+  isRetorno                               Boolean
+  obervacao                               String       @db.VarChar(255)
+  tipoExame                               String       @db.Uuid
+  medicoId                                String       @db.Uuid
+  agendamentoId                           String       @db.Uuid
+  agendamento                             agendamento  @relation(fields: [agendamentoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "consulta_agendamentoid_foreign")
+  medico                                  medico       @relation(fields: [medicoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "consulta_medicoid_foreign")
+  pessoa                                  pessoa       @relation(fields: [pessoaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "consulta_pessoaid_foreign")
+  tipoExame_consulta_tipoExameTotipoExame tipoExame    @relation("consulta_tipoExameTotipoExame", fields: [tipoExame], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "consulta_tipoexame_foreign")
+  consultaPos                             consultaPos?
+}
+
+model consultaPos {
+  id         String   @id @db.Uuid
+  consultaId BigInt
+  isAjuda    Boolean
+  isVisita   Boolean
+  observacao String
+  consulta   consulta @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "consultapos_id_foreign")
+}
+
+model medico {
+  id       String     @id @db.Uuid
+  crm      String     @db.VarChar(255)
+  consulta consulta[]
+  pessoa   pessoa     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "medico_id_foreign")
+}
+
+model pessoa {
+  id             String          @id @db.Uuid
+  nome           String?         @db.VarChar(255)
+  cpf            String          @db.VarChar(255)
+  dataNascimento DateTime        @db.Date @default(now())
+  cartaoSus      String          @db.VarChar(255)
+  endRua         String          @db.VarChar(255)
+  endBairro      String          @db.VarChar(255)
+  endNumero      String          @db.VarChar(255)
+  endCidade      String          @db.VarChar(255)
+  endEstado      String          @db.VarChar(255)
+  endCep         String          @db.VarChar(255)
+  agendamento    agendamento[]
+  consulta       consulta[]
+  medico         medico?
+  pessoaContato  pessoaContato[]
+  usuario        usuario[]
+}
+
+model pessoaContato {
+  id          String  @id @db.Uuid
+  nome        String  @db.VarChar(255)
+  isPrincipal Boolean
+  tipo        BigInt
+  pessoaId    String  @db.Uuid
+  pessoa      pessoa  @relation(fields: [pessoaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pessoacontato_pessoaid_foreign")
+}
+
+model role {
+  id          String        @id @db.Uuid
+  nome        String        @db.VarChar(255)
+  isAtivo     Boolean
+  usuarioRole usuarioRole[]
+}
+
+model tipoConsulta {
+  id                                                 String        @id @db.Uuid
+  nome                                               String        @db.VarChar(255)
+  isAtivo                                            Boolean
+  agendamento_agendamento_tipoConsultaTotipoConsulta agendamento[] @relation("agendamento_tipoConsultaTotipoConsulta")
+}
+
+model tipoExame {
+  id                                     String     @id @db.Uuid
+  nome                                   String     @db.VarChar(255)
+  isAtivo                                Boolean
+  consulta_consulta_tipoExameTotipoExame consulta[] @relation("consulta_tipoExameTotipoExame")
+}
+
+model usuario {
+  id          String        @id @db.Uuid
+  login       String        @db.VarChar(255)
+  senha       String        @db.VarChar(255)
+  token       String        @db.VarChar(255)
+  isAtivo     Boolean
+  pessoaId    String        @db.Uuid
+  pessoa      pessoa        @relation(fields: [pessoaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuario_pessoaid_foreign")
+  usuarioRole usuarioRole[]
+}
+
+model usuarioRole {
+  id        String  @id @db.Uuid
+  roleId    String  @db.Uuid
+  usuarioId String  @db.Uuid
+  role      role    @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariorole_roleid_foreign")
+  usuario   usuario @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariorole_usuarioid_foreign")
+}
