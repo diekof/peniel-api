@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PessoaModule } from './pessoa/pessoa.module';
 import { CommonModule } from './common/common.module';
+import { MedicoModule } from './medico/medico.module';
 
 @Module({
-  imports: [PessoaModule,CommonModule],
+  imports: [PessoaModule,CommonModule, MedicoModule],
   controllers: [AppController],
   providers: [AppService],
 })

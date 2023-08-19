@@ -73,6 +73,7 @@ model pessoa {
   endCidade      String          @db.VarChar(255)
   endEstado      String          @db.VarChar(255)
   endCep         String          @db.VarChar(255)
+  createAt       DateTime        @db.Date @default(now())
   agendamento    agendamento[]
   consulta       consulta[]
   medico         medico?

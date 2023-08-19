@@ -3,7 +3,7 @@ import { PessoaService } from './pessoa.service';
 import { Prisma } from '@prisma/client';
 import { UUID } from 'crypto';
 import { PaginateOptions } from 'src/util/paginator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Pessoa')
 @Controller('pessoa')

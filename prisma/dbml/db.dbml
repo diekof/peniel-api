@@ -58,6 +58,7 @@ Table pessoa {
   endCidade String [not null]
   endEstado String [not null]
   endCep String [not null]
+  createAt DateTime [default: `now()`, not null]
   agendamento agendamento [not null]
   consulta consulta [not null]
   medico medico
