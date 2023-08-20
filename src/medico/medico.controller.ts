@@ -5,6 +5,7 @@ import { UpdateMedicoDto } from './dto/update-medico.dto';
 import { PaginateOptions } from 'src/util/paginator';
 import { ApiTags } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
+import { UUID } from 'crypto';
 
 @ApiTags('Médico')
 @Controller('medico')
@@ -24,17 +25,17 @@ export class MedicoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.medicoService.findOne(+id);
+  findOne(@Param('id') id: UUID) {
+    return this.medicoService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMedicoDto: UpdateMedicoDto) {
-    return this.medicoService.update(+id, updateMedicoDto);
+  update(@Param('id') id: UUID, @Body() updateMedicoDto: UpdateMedicoDto) {
+    return this.medicoService.update(id, updateMedicoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.medicoService.remove(+id);
+  remove(@Param('id') id: UUID) {
+    return this.medicoService.remove(id);
   }
 }

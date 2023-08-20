@@ -4,6 +4,7 @@ import { UpdateMedicoDto } from './dto/update-medico.dto';
 import { PrismaService } from '../common/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { PaginateOptions, paginator } from 'src/util/paginator';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class MedicoService {
@@ -57,15 +58,29 @@ export class MedicoService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} medico`;
+  findOne(id: UUID) {
+    return this.prisma.medico.findUnique({
+      where: { id },
+      }).then((medico) => {
+        console.log(medico);
+        if (!medico) {
+          throw new Error('Ops! Medico não encontrado.');
+        }
+      }).catch((error) => {
+        throw new BadRequestException(`${error}`);
+      }
+    );
   }
 
-  update(id: number, updateMedicoDto: UpdateMedicoDto) {
+  update(id: UUID, updateMedicoDto: UpdateMedicoDto) {
     return `This action updates a #${id} medico`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medico`;
+  remove(id: UUID) {
+    return this.prisma.medico.delete({
+      where: { id },
+      }).catch((error) => {
+        throw new BadRequestException('Ops! Ocorreu um erro ao remover o medico.'	);
+      });
   }
 }
