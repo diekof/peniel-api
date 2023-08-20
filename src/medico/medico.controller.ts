@@ -1,8 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { MedicoService } from './medico.service';
 import { CreateMedicoDto } from './dto/create-medico.dto';
 import { UpdateMedicoDto } from './dto/update-medico.dto';
+import { PaginateOptions } from 'src/util/paginator';
+import { ApiTags } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
 
+@ApiTags('Médico')
 @Controller('medico')
 export class MedicoController {
   constructor(private readonly medicoService: MedicoService) {}
@@ -13,8 +17,10 @@ export class MedicoController {
   }
 
   @Get()
-  findAll() {
-    return this.medicoService.findAll();
+  findAll(
+    @Query() pageOptionsDto: PaginateOptions
+  ) {
+    return this.medicoService.findAll(pageOptionsDto);
   }
 
   @Get(':id')
