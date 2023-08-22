@@ -37,6 +37,8 @@ export class PessoaService {
         console.log(pessoa);
         if (!pessoa) {
           throw new Error('Ops! Pessoa não encontrada.');
+        }else{
+          return pessoa;
         }
       }).catch((error) => {
         throw new BadRequestException(`${error}`);

@@ -65,6 +65,8 @@ export class MedicoService {
         console.log(medico);
         if (!medico) {
           throw new Error('Ops! Medico não encontrado.');
+        }else{
+          return medico;
         }
       }).catch((error) => {
         throw new BadRequestException(`${error}`);
