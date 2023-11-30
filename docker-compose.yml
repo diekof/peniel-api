@@ -11,8 +11,8 @@ services:
     networks: 
       - peniel
     volumes:
-      - .\initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
-      - .\db\postgres\data:/var/lib/postgresql/data
+      - ./initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+      - ./db/postgres/data:/var/lib/postgresql/data
     ports:
       - 5432:5432     
     healthcheck:
@@ -21,20 +21,32 @@ services:
       timeout: 5s
       retries: 5 
 
-  # api:
-  #   container_name: peniel-api
-  #   build: 
-  #     context: .
-  #     dockerfile: ./Dockerfile
-  #   entrypoint: ./api.sh
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - .:/home/node/app
-  #   networks: 
-  #     - peniel      
-  #   depends_on: 
-  #     - db   
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "ddonizetecorrea@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "PgAdmin2019!"
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+    networks:
+      - peniel
+
+  api:
+    container_name: peniel-api
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    entrypoint: ./api.sh
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    networks: 
+      - peniel      
+    depends_on: 
+      - db   
 
 networks: 
   peniel:
