@@ -9,7 +9,6 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    "@commitlint/config-conventional"
   ],
   root: true,
   env: {
